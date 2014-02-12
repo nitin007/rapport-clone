@@ -18,6 +18,7 @@ RapportClone.prototype = {
   getUserNames: function(){
     var users = {};
     users.fbUser = $('#fbuser').val();
+    users.ghUser = $('#ghuser').val();
     return users;
   },
   
@@ -31,7 +32,7 @@ RapportClone.prototype = {
       
 			success: function(data, textStatus, jqXHR) {
 			  if (jqXHR.status == 200){
-          $('.response-block').prepend(data.id + ' ' + data.name + ' ' + data.link).show();
+          $('.response-block').prepend(data.fb.id + ' ' + data.name + ' ' + data.link).show();
           $('.query-block').hide();
 			  }
 			}

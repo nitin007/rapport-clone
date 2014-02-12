@@ -1,11 +1,11 @@
 /*
  * GET home page.
  */
+var collectiveRes = {};
 var FB = require('fb');
-
-var fb_access_token = 'CAACEdEose0cBAOrZBpYwpkW5grKfZCZCdZAIU8L76MkyEBA9ZBuyjRjAZAna2ilREUsY9VxxatWc5RRML3wc9W7W5O2Sooh8KdnG69mjAZC3cOYUowupjawjWJdZB12fa8ifM5Cl03OMX3JYxkcwEID4y9QSLT4kmovElTmmEkIK1N7ZAOvWGKZCota8Le8VZAibzc17TKE3var7AZDZD';
-
-FB.setAccessToken(fb_access_token);
+var github3 = require('github3');
+var fb_access_token = 'CAACEdEose0cBAItooAG18dZAD0LMaB7PRzTu0Hgt5jHscf2kUJiNKGqgqqLq6I7oMyTACE2wC6NXZAOdZAlOhkPBP74iowP5D3qxy38UvqZBJW7GXJgFMBkktZCHD8dk332bg2pGUAFVXLDLoPW9QVA0d6PfVoZAZBiU4BMiq31NpR8qDvgnAZBRe3rovD4J48MX83TT25bZCAAZDZD';
+// FB.setAccessToken(fb_access_token);
 
 exports.index = function(req, res) {
   if (req.method == 'GET') {
@@ -13,18 +13,31 @@ exports.index = function(req, res) {
       title: 'Rapport Clone'
     });
   } else {
-    checkUserName(req.body.fbUser, res);
+    fetchFbUser(req.body.fbUser, res);
+    fetchGithubUser(req.body.ghUser, res);
   }
 };
 
-function checkUserName(user, res) {
+function fetchFbUser(user, res) {
   FB.api(user, function(fbRes) {
     if (!fbRes || fbRes.error) {
       console.log(!fbRes ? 'error occurred' : fbRes.error);
       return;
     }
-    
-    res.json(fbRes);
-    res.end();
+    collectiveRes.fb = fbRes;
+    if(Object.keys(collectiveRes).length === 2) {
+      res.json(collectiveRes);
+      res.end();
+    }
+  });
+}
+
+function fetchGithubUser(user, res) {
+  github3.getUserRepos(user, function(error, ghRes) {
+    collectiveRes.gh = ghRes;
+    if(Object.keys(collectiveRes).length === 2) {
+      res.json(collectiveRes);
+      res.end();
+    }
   });
 }
