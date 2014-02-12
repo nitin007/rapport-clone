@@ -5,7 +5,11 @@ block content
   p Welcome to #{title}
   
   div(class='container')
-  label(for='fbuser') Facebook
-  input(id='fbuser' type="text" name="facebook" class='socialApi')
-  br
-  input(type="submit" value="Submit" class='sub')
+    div(class='query-block')
+      label(for='fbuser') Facebook
+      input(id='fbuser' type="text" name="facebook" class='socialApi')
+      br
+      input(type="submit" value="Submit" class='sub')
+      
+    div(class='response-block')
+      a(href='/') Home

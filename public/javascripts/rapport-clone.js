@@ -11,21 +11,28 @@ RapportClone.prototype = {
     var that = this;
     
     $('.sub').click(function(){
-      that.sendAjax();
+      that.sendAjax(that.getUserNames());
     });
   },
   
-  sendAjax: function(){
+  getUserNames: function(){
+    var users = {};
+    users.fbUser = $('#fbuser').val();
+    return users;
+  },
+  
+  sendAjax: function(userNames){
     $.ajax({
       url: '/',
       dataType: 'json',
-      data: {yay: 'yaya'},
+      data: userNames,
 			method: "post",
 			beforeSend: function() {},
       
 			success: function(data, textStatus, jqXHR) {
 			  if (jqXHR.status == 200){
-          console.log('yes');
+          $('.response-block').prepend(data.id + ' ' + data.name + ' ' + data.link).show();
+          $('.query-block').hide();
 			  }
 			}
     });
