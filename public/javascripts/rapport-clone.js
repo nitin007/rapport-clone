@@ -20,7 +20,8 @@ RapportClone.prototype = {
     users.fbUser = $('#fbuser').val();
     users.ghUser = $('#ghuser').val();
     users.twUser = $('#twuser').val();
-    users.gmUser = $('#location').val();
+    users.gmUser = $('#gmuser').val();
+    users.ywUser = $('#ywuser').val();
     return users;
   },
 
