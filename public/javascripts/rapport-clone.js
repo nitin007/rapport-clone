@@ -1,47 +1,48 @@
-var RapportClone = function(){
+var RapportClone = function() {
   this.init();
 }
 
 RapportClone.prototype = {
-  init: function(){
+  init: function() {
     this.submitInfo();
   },
-  
-  submitInfo: function(){
+
+  submitInfo: function() {
     var that = this;
-    
-    $('.sub').click(function(){
+
+    $('.sub').click(function() {
       that.sendAjax(that.getUserNames());
     });
   },
-  
-  getUserNames: function(){
+
+  getUserNames: function() {
     var users = {};
     users.fbUser = $('#fbuser').val();
     users.ghUser = $('#ghuser').val();
+    users.twUser = $('#twuser').val();
     return users;
   },
-  
-  sendAjax: function(userNames){
+
+  sendAjax: function(userNames) {
     $.ajax({
       url: '/',
       dataType: 'json',
       data: userNames,
-			method: "post",
-			beforeSend: function() {},
-      
-			success: function(data, textStatus, jqXHR) {
-			  if (jqXHR.status == 200){
+      method: "post",
+      beforeSend: function() {},
+
+      success: function(data, textStatus, jqXHR) {
+        if (jqXHR.status == 200) {
           $('.response-block').prepend(data.fb.id + ' ' + data.name + ' ' + data.link).show();
           $('.query-block').hide();
-			  }
-			}
+        }
+      }
     });
   }
 }
 
 var rapportClone;
 
-$(function(){
+$(function() {
   rapportClone = new RapportClone();
 });
