@@ -15,7 +15,11 @@ var T = new Twit({
   access_token_secret: 'JSsSfnOIwpuAJxoAwOs6mzyjNewbOy7AKbncJ8xAPB40k'
 });
 
+var req_st;
+
 exports.index = function(req, res) {
+  req_st = new Date();
+  
   if (req.method == 'GET') {
     res.render('index', {
       title: 'Rapport Clone'
@@ -102,5 +106,6 @@ function sendResp(collectiveRes, res) {
   if (Object.keys(collectiveRes).length === 5) {
     res.json(collectiveRes);
     res.end();
+    console.log("Total time taken: %d secs", (new Date() - req_st)/1000);
   }
 }
