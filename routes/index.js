@@ -65,7 +65,7 @@ function fetchGmImage(location, res) {
     'shadow': 'false',
     'icon': 'http://3.bp.blogspot.com/-KCTCIdR7djA/Tyzrk7-WPZI/AAAAAAAAAWM/64LkjNJz29k/s1600/Map_pin1.png'
   }];
-  var gMap = gm.staticMap(location, 16, '500x400', false, false, false, markers);
+  var gMap = gm.staticMap(location, 15, '500x400', false, false, false, markers);
   collectiveRes.gm = gMap;
   sendResp(collectiveRes, res);
 }
