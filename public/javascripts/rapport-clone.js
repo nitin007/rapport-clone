@@ -50,7 +50,7 @@ RapportClone.prototype = {
             tweets[i] = v.text
           });
           var repos = {};
-          $.each(data.gh, function(i, v) {
+          $.each(data.gh.slice(0, 5), function(i, v) {
             repos[i] = {
               clone_url: v.clone_url,
               collaborators_url: v.collaborators_url,

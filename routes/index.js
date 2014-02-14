@@ -1,7 +1,6 @@
 /*
  * GET home page.
  */
-var collectiveRes = {};
 var FB = require('fb');
 var github3 = require('github3');
 var fb_access_token = 'CAACEdEose0cBAItooAG18dZAD0LMaB7PRzTu0Hgt5jHscf2kUJiNKGqgqqLq6I7oMyTACE2wC6NXZAOdZAlOhkPBP74iowP5D3qxy38UvqZBJW7GXJgFMBkktZCHD8dk332bg2pGUAFVXLDLoPW9QVA0d6PfVoZAZBiU4BMiq31NpR8qDvgnAZBRe3rovD4J48MX83TT25bZCAAZDZD';
@@ -22,15 +21,16 @@ exports.index = function(req, res) {
       title: 'Rapport Clone'
     });
   } else {
-    fetchFbUser(req.body.fbUser, res);
-    fetchGithubUser(req.body.ghUser, res);
-    fetchTwitterUser(req.body.twUser, res);
-    fetchGmImage(req.body.gmUser, res);
-    fetchYwTemp(req.body.ywUser, res);
+    var collectiveRes = {};
+    fetchFbUser(req.body.fbUser, res, collectiveRes);
+    fetchGithubUser(req.body.ghUser, res, collectiveRes);
+    fetchTwitterUser(req.body.twUser, res, collectiveRes);
+    fetchGmImage(req.body.gmUser, res, collectiveRes);
+    fetchYwTemp(req.body.ywUser, res, collectiveRes);
   }
 };
 
-function fetchFbUser(user, res) {
+function fetchFbUser(user, res, collectiveRes) {
   FB.api(user, function(fbRes) {
     if (!fbRes || fbRes.error) {
       console.log(!fbRes ? 'error occurred' : fbRes.error);
@@ -41,14 +41,14 @@ function fetchFbUser(user, res) {
   });
 }
 
-function fetchGithubUser(user, res) {
+function fetchGithubUser(user, res, collectiveRes) {
   github3.getUserRepos(user, function(error, ghRes) {
     collectiveRes.gh = ghRes;
     sendResp(collectiveRes, res);
   });
 }
 
-function fetchTwitterUser(handle, res) {
+function fetchTwitterUser(handle, res, collectiveRes) {
   T.get('statuses/user_timeline', {
     screen_name: handle
   }, function(err, twRes) {
@@ -57,7 +57,7 @@ function fetchTwitterUser(handle, res) {
   });
 }
 
-function fetchGmImage(location, res) {
+function fetchGmImage(location, res, collectiveRes) {
   var markers = [{
     'location': location,
     'color': 'red',
@@ -77,7 +77,7 @@ function fetchGmImage(location, res) {
     logging: false
   };
 
-  fetchYwTemp = function (location, res) {
+  fetchYwTemp = function (location, res, collectiveRes) {
     params.location = location;
     weather(params, function(yTemp) {
       collectiveRes.yt = yTemp;
