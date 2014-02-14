@@ -86,9 +86,9 @@ function fetchGmImage(location, res, collectiveRes) {
     'icon': 'http://3.bp.blogspot.com/-KCTCIdR7djA/Tyzrk7-WPZI/AAAAAAAAAWM/64LkjNJz29k/s1600/Map_pin1.png'
   }];
   var gMap = gm.staticMap(location, 15, '500x400', function(err, data) {
-      console.log("Gmap took: %d secs", (new Date() - gm_req_st) / 1000);
-    }, false, false, markers);
-  
+    console.log("Gmap took: %d secs", (new Date() - gm_req_st) / 1000);
+  }, false, false, markers);
+
   collectiveRes.gm = gMap;
   sendResp(collectiveRes, res);
 }
@@ -97,20 +97,21 @@ function fetchGmImage(location, res, collectiveRes) {
   var params = {
     location: null,
     appid: "dDfIKhXV34Eq7pmipniTh3Bza0dokIG8qa3O1lypf9brOoPFS2LkQIh6stxUVdgw9wGvkxY-",
-    logging: false
+    logging: true
   };
 
   fetchYwTemp = function(location, res, collectiveRes) {
     var yw_req_st = new Date();
     var result = 'Not Found';
     params.location = location;
-    weather(params, function(yTemp) {
-      result = yTemp;
-      var yw_req_ft = new Date();
+    weather(params, function(err, yTemp) {
+      if (yTemp) {
+        result = yTemp;
+      }
       console.log("Weather took: %d secs", (new Date() - yw_req_st) / 1000);
+      collectiveRes.yt = result;
+      sendResp(collectiveRes, res);
     });
-    collectiveRes.yt = result;
-    sendResp(collectiveRes, res);
   }
 })();
 
