@@ -19,7 +19,7 @@ var req_st;
 
 exports.index = function(req, res) {
   req_st = new Date();
-  
+
   if (req.method == 'GET') {
     res.render('index', {
       title: 'Rapport Clone'
@@ -41,43 +41,43 @@ function fetchFbUser(user, res, collectiveRes) {
       // console.log(!fbRes ? 'error occurred' : fbRes.error);
       collectiveRes.fb = 'Not Fount'
     } else {
-      collectiveRes.fb = fbRes; 
+      collectiveRes.fb = fbRes;
     }
-    console.log("Facebook took: %d secs", (new Date() - fb_req_st)/1000);
+    console.log("Facebook took: %d secs", (new Date() - fb_req_st) / 1000);
     sendResp(collectiveRes, res);
   });
 }
 
 function fetchGithubUser(user, res, collectiveRes) {
-  var gh_req_st = new Date();  
+  var gh_req_st = new Date();
   github3.getUserRepos(user, function(error, ghRes) {
-    if(error){
+    if (error) {
       collectiveRes.gh = 'Not Found';
     } else {
-      collectiveRes.gh = ghRes; 
+      collectiveRes.gh = ghRes;
     }
-    console.log("Github took: %d secs", (new Date() - gh_req_st)/1000);
+    console.log("Github took: %d secs", (new Date() - gh_req_st) / 1000);
     sendResp(collectiveRes, res);
   });
 }
 
 function fetchTwitterUser(handle, res, collectiveRes) {
-  var tw_req_st = new Date();  
+  var tw_req_st = new Date();
   T.get('statuses/user_timeline', {
     screen_name: handle
   }, function(err, twRes) {
-    if(err){
+    if (err) {
       collectiveRes.tw = 'Not Found';
     } else {
       collectiveRes.tw = twRes;
     }
-    console.log("Twitter took: %d secs", (new Date() - tw_req_st)/1000);    
+    console.log("Twitter took: %d secs", (new Date() - tw_req_st) / 1000);
     sendResp(collectiveRes, res);
   });
 }
 
 function fetchGmImage(location, res, collectiveRes) {
-  var gm_req_st = new Date();  
+  var gm_req_st = new Date();
   var markers = [{
     'location': location,
     'color': 'red',
@@ -85,8 +85,10 @@ function fetchGmImage(location, res, collectiveRes) {
     'shadow': 'false',
     'icon': 'http://3.bp.blogspot.com/-KCTCIdR7djA/Tyzrk7-WPZI/AAAAAAAAAWM/64LkjNJz29k/s1600/Map_pin1.png'
   }];
-  var gMap = gm.staticMap(location, 15, '500x400', false, false, false, markers);
-  console.log("Gmap took: %d secs", (new Date() - gm_req_st)/1000);
+  var gMap = gm.staticMap(location, 15, '500x400', function(err, data) {
+      console.log("Gmap took: %d secs", (new Date() - gm_req_st) / 1000);
+    }, false, false, markers);
+  
   collectiveRes.gm = gMap;
   sendResp(collectiveRes, res);
 }
@@ -98,15 +100,15 @@ function fetchGmImage(location, res, collectiveRes) {
     logging: false
   };
 
-  fetchYwTemp = function (location, res, collectiveRes) {
-    var yw_req_st = new Date();      
+  fetchYwTemp = function(location, res, collectiveRes) {
+    var yw_req_st = new Date();
     var result = 'Not Found';
     params.location = location;
     weather(params, function(yTemp) {
       result = yTemp;
       var yw_req_ft = new Date();
+      console.log("Weather took: %d secs", (new Date() - yw_req_st) / 1000);
     });
-    console.log("Weather took: %d secs", (new Date() - yw_req_st)/1000);        
     collectiveRes.yt = result;
     sendResp(collectiveRes, res);
   }
@@ -114,8 +116,8 @@ function fetchGmImage(location, res, collectiveRes) {
 
 function sendResp(collectiveRes, res) {
   if (Object.keys(collectiveRes).length === 5) {
+    console.log("Total time taken: %d secs", (new Date() - req_st) / 1000);
     res.json(collectiveRes);
     res.end();
-    console.log("Total time taken: %d secs", (new Date() - req_st)/1000);
   }
 }
