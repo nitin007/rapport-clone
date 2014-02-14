@@ -33,17 +33,22 @@ exports.index = function(req, res) {
 function fetchFbUser(user, res, collectiveRes) {
   FB.api(user, function(fbRes) {
     if (!fbRes || fbRes.error) {
-      console.log(!fbRes ? 'error occurred' : fbRes.error);
-      return;
+      // console.log(!fbRes ? 'error occurred' : fbRes.error);
+      collectiveRes.fb = 'Not Fount'
+    } else {
+      collectiveRes.fb = fbRes; 
     }
-    collectiveRes.fb = fbRes;
     sendResp(collectiveRes, res);
   });
 }
 
 function fetchGithubUser(user, res, collectiveRes) {
   github3.getUserRepos(user, function(error, ghRes) {
-    collectiveRes.gh = ghRes;
+    if(error){
+      collectiveRes.gh = 'Not Found';
+    } else {
+      collectiveRes.gh = ghRes; 
+    }
     sendResp(collectiveRes, res);
   });
 }
@@ -52,7 +57,12 @@ function fetchTwitterUser(handle, res, collectiveRes) {
   T.get('statuses/user_timeline', {
     screen_name: handle
   }, function(err, twRes) {
-    collectiveRes.tw = twRes;
+    if(err){
+      collectiveRes.tw = 'Not Found';
+    } else {
+      collectiveRes.tw = twRes;
+    }
+    
     sendResp(collectiveRes, res);
   });
 }
@@ -78,11 +88,13 @@ function fetchGmImage(location, res, collectiveRes) {
   };
 
   fetchYwTemp = function (location, res, collectiveRes) {
+    var result = 'Not Found';
     params.location = location;
     weather(params, function(yTemp) {
-      collectiveRes.yt = yTemp;
-      sendResp(collectiveRes, res);
+      result = yTemp;
     });
+    collectiveRes.yt = result;
+    sendResp(collectiveRes, res);
   }
 })();
 
