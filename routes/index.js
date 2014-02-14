@@ -35,6 +35,7 @@ exports.index = function(req, res) {
 };
 
 function fetchFbUser(user, res, collectiveRes) {
+  var fb_req_st = new Date();
   FB.api(user, function(fbRes) {
     if (!fbRes || fbRes.error) {
       // console.log(!fbRes ? 'error occurred' : fbRes.error);
@@ -42,22 +43,26 @@ function fetchFbUser(user, res, collectiveRes) {
     } else {
       collectiveRes.fb = fbRes; 
     }
+    console.log("Facebook took: %d secs", (new Date() - fb_req_st)/1000);
     sendResp(collectiveRes, res);
   });
 }
 
 function fetchGithubUser(user, res, collectiveRes) {
+  var gh_req_st = new Date();  
   github3.getUserRepos(user, function(error, ghRes) {
     if(error){
       collectiveRes.gh = 'Not Found';
     } else {
       collectiveRes.gh = ghRes; 
     }
+    console.log("Github took: %d secs", (new Date() - gh_req_st)/1000);
     sendResp(collectiveRes, res);
   });
 }
 
 function fetchTwitterUser(handle, res, collectiveRes) {
+  var tw_req_st = new Date();  
   T.get('statuses/user_timeline', {
     screen_name: handle
   }, function(err, twRes) {
@@ -66,12 +71,13 @@ function fetchTwitterUser(handle, res, collectiveRes) {
     } else {
       collectiveRes.tw = twRes;
     }
-    
+    console.log("Twitter took: %d secs", (new Date() - tw_req_st)/1000);    
     sendResp(collectiveRes, res);
   });
 }
 
 function fetchGmImage(location, res, collectiveRes) {
+  var gm_req_st = new Date();  
   var markers = [{
     'location': location,
     'color': 'red',
@@ -80,6 +86,7 @@ function fetchGmImage(location, res, collectiveRes) {
     'icon': 'http://3.bp.blogspot.com/-KCTCIdR7djA/Tyzrk7-WPZI/AAAAAAAAAWM/64LkjNJz29k/s1600/Map_pin1.png'
   }];
   var gMap = gm.staticMap(location, 15, '500x400', false, false, false, markers);
+  console.log("Gmap took: %d secs", (new Date() - gm_req_st)/1000);
   collectiveRes.gm = gMap;
   sendResp(collectiveRes, res);
 }
@@ -92,11 +99,14 @@ function fetchGmImage(location, res, collectiveRes) {
   };
 
   fetchYwTemp = function (location, res, collectiveRes) {
+    var yw_req_st = new Date();      
     var result = 'Not Found';
     params.location = location;
     weather(params, function(yTemp) {
       result = yTemp;
+      var yw_req_ft = new Date();
     });
+    console.log("Weather took: %d secs", (new Date() - yw_req_st)/1000);        
     collectiveRes.yt = result;
     sendResp(collectiveRes, res);
   }
