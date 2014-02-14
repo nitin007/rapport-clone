@@ -35,8 +35,18 @@ RapportClone.prototype = {
 
       success: function(data, textStatus, jqXHR) {
         if (jqXHR.status == 200) {
-          $('.response-block').prepend(data.fb.id + ' ' + data.name + ' ' + data.link).show();
+          var tw_user = data.tw[0].user;
+          var user_info = { name: tw_user.name, screen_name: tw_user.screen_name, description: tw_user.description, fav_count: tw_user.favourites_count, flwrs_count: tw_user.followers_count, following: tw_user.friends_count, pro_img: tw_user.profile_image_url }
+          
+          
+          
           $('.query-block').hide();
+          $('.response-block').show();
+          $('.fb-res').append("<span>"+JSON.stringify(data.fb)+"</span>&nbsp<img src=https://graph.facebook.com/"+data.fb.id+"/picture />");
+          debugger;
+          $('.yw-res').append("<span>"+JSON.stringify(data.yt)+"</span>&nbsp<img src="+user_info.pro_img+" />");
+          $('.tw-res .user-info').append("<user>"+ JSON.stringify(user_info) +"</user>");
+          $('.gm-res').append("<img src="+data.gm+" />");
         }
       }
     });
