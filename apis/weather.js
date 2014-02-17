@@ -2,8 +2,7 @@ var weather = require('weather');
 
 var params = {
   location: null,
-  appid: "dDfIKhXV34Eq7pmipniTh3Bza0dokIG8qa3O1lypf9brOoPFS2LkQIh6stxUVdgw9wGvkxY-",
-  logging: true
+  appid: "dDfIKhXV34Eq7pmipniTh3Bza0dokIG8qa3O1lypf9brOoPFS2LkQIh6stxUVdgw9wGvkxY-"
 };
 
 exports.getDetails = function(location, callback) {
