@@ -17,7 +17,7 @@ role :app, "128.199.238.11"
 
 namespace :deploy do
   task :start, :roles => :app do
-    run "restart #{application} || sudo start #{application}"
+    run "sudo restart #{application} || sudo start #{application}"
   end
  
   task :stop, :roles => :app do
