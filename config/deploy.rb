@@ -21,7 +21,7 @@ namespace :deploy do
   end
  
   task :stop, :roles => :app do
-    run "stop #{application}"
+    run "sudo stop #{application}"
   end
  
   task :restart, :roles => :app do
